@@ -19,6 +19,7 @@ function ABSlideshow(options)
         debug               : false,
         startIndex          : 0,
         classes             : [],
+        flags_delay         : [],
         // showButtons      : false, // maybe add this feature later
     };
 
@@ -28,6 +29,8 @@ function ABSlideshow(options)
     this.interval   = {};
 
     var ok_to_start = true;
+
+    this.starting = true;
 
     if (!this.settings.targetElement) {
         ok_to_start = false;
@@ -67,62 +70,83 @@ ABSlideshow.prototype.start = function start()
 
             if (self.settings.active) 
             {
-                if (!self.settings.targetElement.firstChild) { // starting first time
+                var apply_delay = false;
 
-                    if (self.settings.debug) { console.log('ABSlideshow.prototype.processInterval ::: starting looping') };
-
-                    // set currentIndex
-                    self.currentIndex = self.settings.startIndex;
-
-                    // prepare new slide
-                    var new_element = self.prepareNewElementAtIndex(self.currentIndex, true);
-
-                    // add it to the parent
-                    self.settings.targetElement.appendChild(new_element);
-                }
-                else // normal loop
+                for (var i = 0; i <= self.settings.flags_delay.length - 1; i++)
                 {
-                    if (self.settings.debug) { console.log('ABSlideshow.prototype.processInterval ::: normal loop') };
+                    if (window[self.settings.flags_delay[i]] === true) {
+                        apply_delay = true;
+                    };
+                }
 
-                    // set currentIndex
-                    self.currentIndex = self.currentIndex + 1;
-                    if (self.currentIndex === self.settings.images.length) { self.currentIndex = 0 };
-
-                    // prepare new slide
-                    var new_element = self.prepareNewElementAtIndex(self.currentIndex);
-
-                    // add it to the parent
-                    self.settings.targetElement.appendChild(new_element);
-
-                    // remove previous after delay
+                if (apply_delay) {
                     setTimeout(function() {
-                        self.settings.targetElement.firstChild.parentNode.removeChild(self.settings.targetElement.firstChild);
-                    }, removePreviousElement_delay);
-                }
-
-                if (self.settings.debug) { console.log('ABSlideshow.prototype.processInterval ::: self.currentIndex: ' + self.currentIndex); };
-                
-                // call new slide if slideshow is still active
-                setTimeout(function() {
-                    if (self.settings.active) {
-                        executeSlideshowLoop();
-                    };
-                }, removePreviousElement_delay + (self.settings.slideDuration * 1000));
-
-                setTimeout(function()
-                {
-                    if (self.settings.active) {
-                        // call onChange callback is given in parameters
-                        if (self.settings.onSlideChange) {
-                            self.settings.onSlideChange(selt.currentIndex);
+                        if (self.settings.active) {
+                            executeSlideshowLoop();
                         };
+                    }, 2000);
+                }
+                else
+                {
+                    if (self.starting) { // starting first time
 
-                        // show new slide
-                        new_element.style.opacity = 1;
+                        if (self.settings.debug) { console.log('ABSlideshow.prototype.processInterval ::: starting looping') };
 
-                        self.currentSlideElement = new_element;
-                    };
-                }, 400);
+                        self.starting = false;
+                        
+                        // set currentIndex
+                        self.currentIndex = self.settings.startIndex;
+
+                        // prepare new slide
+                        var new_element = self.prepareNewElementAtIndex(self.currentIndex, true);
+
+                        // add it to the parent
+                        self.settings.targetElement.appendChild(new_element);
+                    }
+                    else // normal loop
+                    {
+                        if (self.settings.debug) { console.log('ABSlideshow.prototype.processInterval ::: normal loop') };
+
+                        // set currentIndex
+                        self.currentIndex = self.currentIndex + 1;
+                        if (self.currentIndex === self.settings.images.length) { self.currentIndex = 0 };
+
+                        // prepare new slide
+                        var new_element = self.prepareNewElementAtIndex(self.currentIndex);
+
+                        // add it to the parent
+                        self.settings.targetElement.appendChild(new_element);
+
+                        // remove previous after delay
+                        setTimeout(function() {
+                            self.settings.targetElement.firstChild.parentNode.removeChild(self.settings.targetElement.firstChild);
+                        }, removePreviousElement_delay);
+                    }
+
+                    if (self.settings.debug) { console.log('ABSlideshow.prototype.processInterval ::: self.currentIndex: ' + self.currentIndex); };
+                    
+                    // call new slide if slideshow is still active
+                    setTimeout(function() {
+                        if (self.settings.active) {
+                            executeSlideshowLoop();
+                        };
+                    }, removePreviousElement_delay + (self.settings.slideDuration * 1000));
+
+                    setTimeout(function()
+                    {
+                        if (self.settings.active) {
+                            // call onChange callback is given in parameters
+                            if (self.settings.onSlideChange) {
+                                self.settings.onSlideChange(selt.currentIndex);
+                            };
+
+                            // show new slide
+                            new_element.style.opacity = 1;
+
+                            self.currentSlideElement = new_element;
+                        };
+                    }, 400);
+                }
             };
         };
 
@@ -163,7 +187,11 @@ ABSlideshow.prototype.prepareNewElementAtIndex = function prepareNewElementAtInd
 {
     if (this.settings.debug) { console.log('ABSlideshow.prototype.prepareNewElementAtIndex'); };
 
+    console.log('prepareNewElementAtIndex');
+    console.log('index: ' + index);
+
     var imageURLAtIndex = this.settings.images[index];
+    console.log('imageURLAtIndex: ' + imageURLAtIndex);
 
     var new_element = document.createElement('DIV');
 
@@ -173,7 +201,7 @@ ABSlideshow.prototype.prepareNewElementAtIndex = function prepareNewElementAtInd
     new_element.style.left                      = '0px';
     new_element.style.height                    = '100%';
     new_element.style.width                     = '100%';
-    new_element.style.background                = 'url(' + imageURLAtIndex + ') no-repeat center center fixed'
+    new_element.style.background                = 'url(' + imageURLAtIndex + ') no-repeat center center'
     new_element.style.webkitBackgroundSize      = 'cover';
     new_element.style.mozBackgroundSize         = 'cover';
     new_element.style.oBackgroundSize           = 'cover';
