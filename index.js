@@ -43,7 +43,7 @@ function ABSlideshow(options)
     }
 
     if (ok_to_start) { if (this.settings.autoStart) { this.start(); };
-    } else { console.log('ABSlideshow ::: ok_to_start false'); }
+    } else { if (this.settings.debug) { console.log('ABSlideshow ::: ok_to_start false'); }; }
 }
 
 ABSlideshow.prototype.start = function start()
@@ -185,13 +185,15 @@ ABSlideshow.prototype.destroy = function destroy()
 
 ABSlideshow.prototype.prepareNewElementAtIndex = function prepareNewElementAtIndex(index, visible)
 {
-    if (this.settings.debug) { console.log('ABSlideshow.prototype.prepareNewElementAtIndex'); };
+    if (this.settings.debug) {
+        console.log('ABSlideshow.prototype.prepareNewElementAtIndex');
 
-    console.log('prepareNewElementAtIndex');
-    console.log('index: ' + index);
+        console.log('prepareNewElementAtIndex');
+        console.log('index: ' + index);
+    };
 
     var imageURLAtIndex = this.settings.images[index];
-    console.log('imageURLAtIndex: ' + imageURLAtIndex);
+    if (this.settings.debug) { console.log('imageURLAtIndex: ' + imageURLAtIndex); };
 
     var new_element = document.createElement('DIV');
 
