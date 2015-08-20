@@ -5,7 +5,7 @@ function ABSlideshow(options)
     if (!(this instanceof ABSlideshow)) {
         return new ABSlideshow(options);
     }
-    
+
     var self = this;
 
     this.settings = {
@@ -43,7 +43,7 @@ function ABSlideshow(options)
     }
 
     if (ok_to_start) { if (this.settings.autoStart) { this.start(); };
-    } else { console.log('ABSlideshow ::: ok_to_start false'); }
+    } else { if (this.settings.debug) { console.log('ABSlideshow ::: ok_to_start false'); }; }
 }
 
 ABSlideshow.prototype.start = function start()
@@ -53,7 +53,7 @@ ABSlideshow.prototype.start = function start()
     if (!this.settings.active)
     {
         this.settings.active = true;
-        
+
         var self = this;
         var removePreviousElement_delay = (this.settings.transitionDuration + 0.8) * 1000;
 
@@ -68,7 +68,7 @@ ABSlideshow.prototype.start = function start()
         {
             if (self.settings.debug) { console.log('ABSlideshow.prototype.processInterval'); };
 
-            if (self.settings.active) 
+            if (self.settings.active)
             {
                 var apply_delay = false;
 
@@ -93,7 +93,7 @@ ABSlideshow.prototype.start = function start()
                         if (self.settings.debug) { console.log('ABSlideshow.prototype.processInterval ::: starting looping') };
 
                         self.starting = false;
-                        
+
                         // set currentIndex
                         self.currentIndex = self.settings.startIndex;
 
@@ -124,7 +124,7 @@ ABSlideshow.prototype.start = function start()
                     }
 
                     if (self.settings.debug) { console.log('ABSlideshow.prototype.processInterval ::: self.currentIndex: ' + self.currentIndex); };
-                    
+
                     // call new slide if slideshow is still active
                     setTimeout(function() {
                         if (self.settings.active) {
@@ -166,32 +166,34 @@ ABSlideshow.prototype.destroy = function destroy()
     if (this.settings.debug) { console.log('ABSlideshow.prototype.destroy'); };
 
     this.settings.active = false;
-    
+
     while (this.settings.targetElement.firstChild) {
         this.settings.targetElement.removeChild(this.settings.targetElement.firstChild);
     }
 }
 
 
-//   ## ##                ######  ##    ##  ######  
-//   ## ##               ##    ##  ##  ##  ##    ## 
-// #########             ##         ####   ##       
-//   ## ##                ######     ##     ######  
-// #########                   ##    ##          ## 
-//   ## ##               ##    ##    ##    ##    ## 
-//   ## ##                ######     ##     ######  
+//   ## ##                ######  ##    ##  ######
+//   ## ##               ##    ##  ##  ##  ##    ##
+// #########             ##         ####   ##
+//   ## ##                ######     ##     ######
+// #########                   ##    ##          ##
+//   ## ##               ##    ##    ##    ##    ##
+//   ## ##                ######     ##     ######
 
 
 
 ABSlideshow.prototype.prepareNewElementAtIndex = function prepareNewElementAtIndex(index, visible)
 {
-    if (this.settings.debug) { console.log('ABSlideshow.prototype.prepareNewElementAtIndex'); };
+    if (this.settings.debug) {
+        console.log('ABSlideshow.prototype.prepareNewElementAtIndex');
 
-    console.log('prepareNewElementAtIndex');
-    console.log('index: ' + index);
+        console.log('prepareNewElementAtIndex');
+        console.log('index: ' + index);
+    };
 
     var imageURLAtIndex = this.settings.images[index];
-    console.log('imageURLAtIndex: ' + imageURLAtIndex);
+    if (this.settings.debug) { console.log('imageURLAtIndex: ' + imageURLAtIndex); };
 
     var new_element = document.createElement('DIV');
 
@@ -235,7 +237,7 @@ ABSlideshow.prototype.prepareNewElementAtIndex = function prepareNewElementAtInd
 
     // add any given classes to the new slide element
     for (var i = this.settings.classes.length - 1; i >= 0; i--) {
-        if (i === 0) { new_element.className = new_element.className + this.settings.classes[i] } 
+        if (i === 0) { new_element.className = new_element.className + this.settings.classes[i] }
         else { new_element.className = new_element.className + ' ' + this.settings.classes[i] };
     };
 
@@ -243,21 +245,21 @@ ABSlideshow.prototype.prepareNewElementAtIndex = function prepareNewElementAtInd
 }
 
 
-ABSlideshow.prototype.extend = function extend( defaults, options ) 
+ABSlideshow.prototype.extend = function extend( defaults, options )
 {
     var extended = {};
     var prop;
 
-    for (prop in defaults) 
+    for (prop in defaults)
     {
         if (Object.prototype.hasOwnProperty.call(defaults, prop)) {
             extended[prop] = defaults[prop];
         }
     }
 
-    for (prop in options) 
+    for (prop in options)
     {
-        if (Object.prototype.hasOwnProperty.call(options, prop)) 
+        if (Object.prototype.hasOwnProperty.call(options, prop))
         {
             extended[prop] = options[prop];
         }
