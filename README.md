@@ -12,7 +12,7 @@ This slideshow doesn't require markup. No need to add the images to the DOM befo
 Just set targetElement to the element where you want your slideshow to be, and while the slideshow progresses, DOM elements will be automatically added and removed to display the images.
 
 
-## How it works internally
+## How it works
 
 IMG tags are not used. Instead, each slide element is a dynamically created DIV with the CSS property "background-image" set to "(url_of_image) no-repeat center center fixed" - and the CSS property "background-size" set to 'cover'. This is done to ensure perfect fitting of the image at any size of the parent element holding the slideshow. Handy for responsive design. You can resize the parent element as you wish, the images will always cover the available area in the best possible fit.
 
@@ -20,12 +20,15 @@ No CSS is needed from you (except for the parent element). The slideshow and the
 
 When the slideshow starts, it creates a DIV in the given targetElement (using appendChild), with it's background-image property set to the URL of the image file, it's background-size property to 'cover' and opacity 1.
 
-Each time the slideshow transitions to a new image, a new DIV is created on top of the current one, with it's background-image set to the URL of the next image file, and with opacity 0. CSS transitions are then activaved in the new DIV and it's opacity set to 1, making the DIV fade in. When the new DIV finishes fading in, the previous DIV is removed from the DOM. 
+Each time the slideshow transitions to a new image, a new DIV is created on top of the current one, with it's background-image set to the URL of the next image file, and with opacity 0. CSS transitions are then activated in the new DIV and it's opacity set to 1, making the DIV fade in. When the new DIV finishes fading in, the previous DIV is removed from the DOM. 
 
-Roadmap:
+###Roadmap:
 
-Previous / Next functionality
-Circles showing current position
+- Priority:
+  - Loading images discreetly
+- Maybe:
+  - Previous / Next functionality
+  - Circles showing current position
 
 
 ## Install
@@ -38,18 +41,18 @@ $ npm install ab-slideshow --save-dev
 
 ## Usage
 
-	var slideshow = require("ab-slideshow");
+    var slideshow = require("ab-slideshow");
 
-	// Basic usage
+    // Basic usage
 
-	var new_slideshow = new slideshow({
+    var new_slideshow = new slideshow({
         images: ['path/img1.png', 'path/img2.jpg'],
         targetElement: document.getElementById('slideshow-container')
     });
 
-	// Advanced usage
+    // Advanced usage
 
-	var new_slideshow = new slideshow({
+    var new_slideshow = new slideshow({
         images: ['path/img1.png', 'path/img2.jpg'],
         targetElement: document.getElementById('slideshow-container')
         transitionDuration: 1.5, // in seconds
