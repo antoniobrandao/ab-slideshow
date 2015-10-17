@@ -137,7 +137,7 @@ ABSlideshow.prototype.start = function start()
                         if (self.settings.active) {
                             // call onChange callback is given in parameters
                             if (self.settings.onSlideChange) {
-                                self.settings.onSlideChange(selt.currentIndex);
+                                self.settings.onSlideChange(self.currentIndex);
                             };
 
                             // show new slide
